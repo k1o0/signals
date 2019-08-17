@@ -71,7 +71,7 @@ classdef Signal < sig.Signal & handle
       m = mapn(sig1, sig2, f, varargin{:});
     end
     
-    function m = mapn(varargin)
+    function varargout = mapn(varargin)
       % destructure varargin
       if isa(varargin{end}, 'function_handle')
         [sigs{1:nargin-1}, f] = varargin{:};
@@ -79,7 +79,10 @@ classdef Signal < sig.Signal & handle
       else
         [sigs{1:nargin-2}, f, formatSpec] = varargin{:};
       end
-      m = applyTransferFun(sigs{:}, 'sig.transfer.mapn', f, formatSpec);
+      varargout = cell(1,nargout);
+      for i = 1:nargout
+        [varargout{i}] = applyTransferFun(sigs{:}, 'sig.transfer.mapn', {f,i}, formatSpec);
+      end
     end
     
     function sc = scan(varargin)

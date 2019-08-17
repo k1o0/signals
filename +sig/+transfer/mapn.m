@@ -2,6 +2,7 @@ function [val, valset] = mapn(net, inputs, node, f)
 %XSIG.TRANSFER.MAPN Summary of this function goes here
 %   Detailed explanation goes here
 
+[f, outnum] = f{:};
 n = numel(inputs);
 inpvals = cell(n, 1);
 wvset = false(n, 1);
@@ -24,7 +25,9 @@ end
 if any(wvset)
   % canonical line: call map function with latest inputs. new output is
   % result from map
-  val = f(inpvals{:});
+  out = cell(1,outnum);
+  [out{:}] = f(inpvals{:});
+  val = out{end};
   valset = true;
 else % no inputs have a working value -> no output
   val = [];
